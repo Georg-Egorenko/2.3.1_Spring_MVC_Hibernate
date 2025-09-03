@@ -4,36 +4,47 @@ import com.example.app.dao.UserDao;
 import com.example.app.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService{
 
-    @Autowired
-    private UserDao userDao;
+    private final UserDao userDao;
 
+    @Autowired
+    public UserServiceImpl(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
     @Override
-    @Transactional
     public List<User> getAllUsers() {
         return userDao.getAllUsers();
     }
 
     @Override
-    @Transactional
-    public void saveUser(User user) {
+    public void createUser(String firstName, String lastName, String email) {
+        User user = new User();
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setEmail(email);
+
         userDao.saveUser(user);
     }
 
     @Override
-    @Transactional
-    public User getUser(long id) {
-        return userDao.getUserById(id);
+    public void updateUser(long id, String firstName, String lastName, String email) {
+        User user = userDao.getUserById(id);{
+            if( user == null){
+                user = new User();
+            }
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setEmail(email);
+        }
+        userDao.saveUser(user);
     }
 
     @Override
-    @Transactional
     public void deleteUser(long id) {
         userDao.deleteUser(id);
 

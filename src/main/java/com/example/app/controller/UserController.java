@@ -25,8 +25,7 @@ public class UserController {
 
     @GetMapping
     public String showAllUsers(Model model) {
-        List<User> users = userService.getAllUsers();
-        model.addAttribute("users", users);
+        model.addAttribute("users", userService.getAllUsers());
         return "users";
     }
 
@@ -34,11 +33,7 @@ public class UserController {
     public String addUser(@RequestParam String firstName,
                           @RequestParam String lastName,
                           @RequestParam String email) {
-        User user = new User();
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setEmail(email);
-        userService.saveUser(user);
+        userService.createUser(firstName, lastName, email);
         return "redirect:/users";
     }
 
@@ -47,13 +42,7 @@ public class UserController {
                              @RequestParam String firstName,
                              @RequestParam String lastName,
                              @RequestParam String email) {
-        User user = userService.getUser(id);
-        if (user != null) {
-            user.setFirstName(firstName);
-            user.setLastName(lastName);
-            user.setEmail(email);
-            userService.saveUser(user);
-        }
+        userService.updateUser(id, firstName, lastName, email);
         return "redirect:/users";
     }
 
